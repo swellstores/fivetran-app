@@ -49,15 +49,11 @@
     },
     {
       "id": "collections",
-      "label": "Collections to sync",
+      "label": "Collections to send events for",
       "type": "select",
       "ui": "checkboxes",
       "multi": true,
-      "default": [
-        "orders",
-        "accounts",
-        "products"
-      ],
+      "default": [],
       "options": [
         {
           "value": "orders",

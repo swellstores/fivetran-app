@@ -4,9 +4,9 @@ Stream your Swell store data to your warehouse through [Fivetran](https://www.fi
 
 ## Features
 
-- **Live sync:** when a record in a synced collection is created, updated or deleted, the app sends it to Fivetran as one row. Updates send the full current record, not just the changed fields.
+- **Live sync:** when a record in a collection selected in settings is created, updated or deleted, the app sends it to Fivetran as one row. Updates send the full current record, not just the changed fields.
 - **Collections:** orders, customers (`accounts`), products, subscriptions, payments, refunds, invoices, carts, coupons, promotions and categories. Pick which ones in settings.
-- **Backfills:** a **Fivetran** page in the dashboard sidebar lists backfill jobs. Start one per collection with **New fivetran backfill** (optionally only records created after a date), or all synced collections at once with **Backfill all synced collections**. Each job shows its status, records sent, total and the last error.
+- **Backfills:** a **Fivetran** page in the dashboard sidebar lists backfill jobs. Start one per collection with **New fivetran backfill** (optionally only records created after a date), or all 11 collections at once with **Backfill all collections**. Each job shows its status, records sent, total and the last error.
 - **Cancel and resume:** an active backfill can be canceled. A failed or canceled one can be resumed. It continues after the last record sent.
 - **Request signing:** with a signing secret, every request carries an HMAC SHA-256 signature that the connector can verify.
 - **Connection test:** create a backfill with collection **Connection test** to send one test row. The job shows `completed`, or `failed` with Fivetran's error.
@@ -21,7 +21,7 @@ All credentials and options are app settings (`settings/fivetran.json`). Nothing
 | Signing secret | no | | Signs each request body with HMAC SHA-256. Use the same secret in the connector's signature validation. |
 | Signature header | no | `X-Fivetran-Signature-256` | Header the signature is sent in. Must match the header key in the connector. |
 | Signature encoding | no | Hexadecimal | `Hexadecimal` or `Base64`. Must match the connector. |
-| Collections to sync | no | Orders, Customers, Products | Collections sent live and offered by **Backfill all synced collections**. |
+| Collections to send events for | no | Orders, Customers, Products | Collections whose changes are sent live. **Backfill all collections** always covers all 11. |
 | Send deletions | no | on | Send a row with `event: "deleted"` when a record is deleted. |
 | Backfill page size | no | 100 | Records per request during a backfill (1–500). Lower it if Fivetran rejects requests as too large. |
 | Enabled | no | on | Turns off all sending without uninstalling the app. Running backfills fail with a message. |
@@ -30,9 +30,9 @@ All credentials and options are app settings (`settings/fivetran.json`). Nothing
 
 1. In Fivetran, add a connector of type **Webhooks** and choose the destination schema and table name. Copy the **webhook URL** from the setup form.
 2. Optional: in the connector's signature validation, choose algorithm **SHA-256**, encoding hex or base64, a header key (e.g. `X-Fivetran-Signature-256`) and a secret.
-3. Install the app in Swell and open its settings. Paste the **Webhook URL**. If you set up signing, enter the same secret, header and encoding. Pick the collections to sync and save.
+3. Install the app in Swell and open its settings. Paste the **Webhook URL**. If you set up signing, enter the same secret, header and encoding. Pick the collections to send events for and save.
 4. Open **Fivetran** in the dashboard sidebar, click **New fivetran backfill**, choose collection **Connection test** and save. Within a few seconds the job should show status **Completed**. If it shows **Failed**, the error explains why (wrong URL, signature mismatch, ...).
-5. Start backfills to send existing records: **Backfill all synced collections**, or **New fivetran backfill** with one collection.
+5. Start backfills to send existing records: **Backfill all collections**, or **New fivetran backfill** with one collection.
 6. After the connector's next sync, the rows are in your destination.
 
 ## Data in the warehouse
@@ -71,7 +71,7 @@ The table is an **event log**, not a mirror: every change adds a row. To get the
 |---|---|---|
 | `functions/record-events.ts` | `created`/`updated`/`deleted` events of every supported collection; `payment.succeeded`/`failed`/`voided` for payments | Checks the settings, re-reads the full record on updates and sends one row. |
 | `functions/backfill-run.ts` | `backfill.created`, `backfill.updated` (status `pending` or `running`) | For a **Connection test** job, sends one test row. Otherwise sends one page of the collection (sorted by id, after `last_id`) and saves progress. Saving the page triggers the next run, so each page gets its own 10-second function run. |
-| `functions/backfill-all.ts` | Action: **Backfill all synced collections** (backfills list) | Creates a pending backfill for each synced collection that has no active one. |
+| `functions/backfill-all.ts` | Action: **Backfill all collections** (backfills list) | Creates a pending backfill for each of the 11 collections that has no active one. |
 | `functions/backfill-control.ts` | Actions: **Cancel backfill**, **Resume backfill** (backfill page) | Sets the job to `canceled`, or back to `pending`. |
 | `functions/test-connection.ts` | Action (not shown in the dashboard yet, see Development) | Sends one `test` row and returns the result. Callable with `swell api post /functions/fivetran/test-connection`. |
 | `functions/lib/fivetran.ts` | Shared | Collection map, row builder, HMAC signing, Fivetran client, settings helpers. |

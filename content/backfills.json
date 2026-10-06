@@ -196,12 +196,12 @@
         "new",
         {
           "id": "backfill_all",
-          "label": "Backfill all synced collections",
+          "label": "Backfill all collections",
           "function": "backfill-all",
           "loading_label": "Starting backfills...",
           "modal": {
-            "title": "Backfill all synced collections",
-            "description": "Starts one backfill for each collection selected in the app settings. Collections that already have an active backfill are skipped.",
+            "title": "Backfill all collections",
+            "description": "Starts one backfill for each of the 11 collections. Collections that already have an active backfill are skipped.",
             "submit_label": "Start",
             "fields": [
               {

@@ -1,7 +1,7 @@
-import { ACTIVE_STATUSES, COLLECTIONS, getFivetranSettings, isConfigured, syncedCollections } from './lib/fivetran';
+import { ACTIVE_STATUSES, COLLECTIONS, getFivetranSettings, isConfigured } from './lib/fivetran';
 
 export const config: SwellConfig = {
-  description: 'Start backfills for every synced collection',
+  description: 'Start backfills for every collection',
   action: true,
 };
 
@@ -13,10 +13,8 @@ export default async function (req: SwellRequest) {
     throw new SwellError('Set the Fivetran webhook URL in the app settings first', { status: 400 });
   }
 
-  const collections = syncedCollections(settings);
-  if (!collections.length) {
-    throw new SwellError('No collections are selected in the app settings', { status: 400 });
-  }
+  // Every supported collection, regardless of which ones send live events
+  const collections = Object.keys(COLLECTIONS);
 
   const active: any = await swell.get('/backfills', {
     where: { status: { $in: ACTIVE_STATUSES } },
