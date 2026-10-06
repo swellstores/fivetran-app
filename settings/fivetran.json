@@ -14,7 +14,7 @@
     {
       "id": "signing_secret",
       "label": "Signing secret",
-      "type": "short_text",
+      "type": "secret",
       "description": "Optional. Signs each request with HMAC SHA-256. Use the same secret in the connector's signature validation settings."
     },
     {

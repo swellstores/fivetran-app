@@ -21,7 +21,7 @@ All credentials and options are app settings (`settings/fivetran.json`). Nothing
 | Signing secret | no | | Signs each request body with HMAC SHA-256. Use the same secret in the connector's signature validation. |
 | Signature header | no | `X-Fivetran-Signature-256` | Header the signature is sent in. Must match the header key in the connector. |
 | Signature encoding | no | Hexadecimal | `Hexadecimal` or `Base64`. Must match the connector. |
-| Collections to send events for | no | Orders, Customers, Products | Collections whose changes are sent live. **Backfill all collections** always covers all collections. |
+| Collections to send events for | no | None | Collections whose changes are sent live. None are checked at first. **Backfill all collections** always covers all collections. |
 | Send deletions | no | on | Send a row with `event: "deleted"` when a record is deleted. |
 | Backfill page size | no | 100 | Records per request during a backfill (1–500). Lower it if Fivetran rejects requests as too large. |
 | Enabled | no | on | Turns off all sending without uninstalling the app. Running backfills fail with a message. |
@@ -118,4 +118,4 @@ swell logs --type function -s backfill-run
 - **Event payloads:** on `deleted` events, the record id is only in `$event.data`. `req.data.id` is missing.
 - **Test scaffold:** `test/tsconfig.json` adds the `webworker.iterable` lib so the scaffolded `mock-request.ts` typechecks.
 
-Listing assets: `assets/icon.png` (512×512) and the four App Store images in `assets/images/` (3200×1800), referenced from `images` in `swell.json`. `assets/screenshots/*.png` are still placeholders for real dashboard screenshots.
+Listing assets: `assets/icon.png` (Fivetran's mark, 512×512) and the four App Store images in `assets/images/` (3200×1800), referenced from `images` in `swell.json`.

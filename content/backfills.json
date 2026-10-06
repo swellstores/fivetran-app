@@ -228,7 +228,7 @@
     },
     {
       "id": "edit",
-      "title": "{{ record.collection }} backfill",
+      "title": "{{ collection | capitalize }} backfill",
       "fields": [
         {
           "type": "field_row",
