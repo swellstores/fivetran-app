@@ -118,4 +118,4 @@ swell logs --type function -s backfill-run
 - **Event payloads:** on `deleted` events, the record id is only in `$event.data`. `req.data.id` is missing.
 - **Test scaffold:** `test/tsconfig.json` adds the `webworker.iterable` lib so the scaffolded `mock-request.ts` typechecks.
 
-Listing assets: `assets/icon.png` (512×512) and `assets/screenshots/*.png` (1280×800) are placeholders, referenced from `images` in `swell.json`. Replace them with real artwork and dashboard screenshots before release.
+Listing assets: `assets/icon.png` (512×512) and the four App Store images in `assets/images/` (3200×1800), referenced from `images` in `swell.json`. `assets/screenshots/*.png` are still placeholders for real dashboard screenshots.
