@@ -142,8 +142,7 @@
     {
       "id": "list",
       "nav": {
-        "label": "Fivetran",
-        "icon": "integrations"
+        "label": "Fivetran"
       },
       "sort": {
         "date_created": "desc"
