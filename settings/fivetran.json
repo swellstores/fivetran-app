@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json.swell.store/setting.json",
+  "label": "Fivetran",
+  "description": "Stream store data to a Fivetran Webhooks connector. In Fivetran, add a Webhooks connector and paste its URL below. To check the connection, open Fivetran in the sidebar and create a backfill with collection \"Connection test\". Then start backfills to send existing records.",
+  "fields": [
+    {
+      "id": "webhook_url",
+      "label": "Webhook URL",
+      "type": "short_text",
+      "required": true,
+      "placeholder": "https://webhooks.fivetran.com/webhooks/...",
+      "description": "The URL of your Fivetran Webhooks connector (shown in the connector setup form)"
+    },
+    {
+      "id": "signing_secret",
+      "label": "Signing secret",
+      "type": "short_text",
+      "description": "Optional. Signs each request with HMAC SHA-256. Use the same secret in the connector's signature validation settings."
+    },
+    {
+      "type": "field_row",
+      "fields": [
+        {
+          "id": "signature_header",
+          "label": "Signature header",
+          "type": "short_text",
+          "default": "X-Fivetran-Signature-256",
+          "description": "Header key set in the connector's signature validation settings",
+          "admin_span": 2
+        },
+        {
+          "id": "signature_encoding",
+          "label": "Signature encoding",
+          "type": "select",
+          "default": "hex",
+          "options": [
+            {
+              "value": "hex",
+              "label": "Hexadecimal"
+            },
+            {
+              "value": "base64",
+              "label": "Base64"
+            }
+          ],
+          "admin_span": 2
+        }
+      ]
+    },
+    {
+      "id": "collections",
+      "label": "Collections to sync",
+      "type": "select",
+      "ui": "checkboxes",
+      "multi": true,
+      "default": [
+        "orders",
+        "accounts",
+        "products"
+      ],
+      "options": [
+        {
+          "value": "orders",
+          "label": "Orders"
+        },
+        {
+          "value": "accounts",
+          "label": "Customers"
+        },
+        {
+          "value": "products",
+          "label": "Products"
+        },
+        {
+          "value": "subscriptions",
+          "label": "Subscriptions"
+        },
+        {
+          "value": "payments",
+          "label": "Payments"
+        },
+        {
+          "value": "refunds",
+          "label": "Refunds"
+        },
+        {
+          "value": "invoices",
+          "label": "Invoices"
+        },
+        {
+          "value": "carts",
+          "label": "Carts"
+        },
+        {
+          "value": "coupons",
+          "label": "Coupons"
+        },
+        {
+          "value": "promotions",
+          "label": "Promotions"
+        },
+        {
+          "value": "categories",
+          "label": "Categories"
+        }
+      ]
+    },
+    {
+      "id": "send_deletes",
+      "label": "Send deletions",
+      "type": "boolean",
+      "ui": "toggle",
+      "default": true,
+      "description": "Send a row with event \"deleted\" when a record is deleted"
+    },
+    {
+      "id": "backfill_page_size",
+      "label": "Backfill page size",
+      "type": "number",
+      "default": 100,
+      "min": 1,
+      "max": 500,
+      "description": "Records per request to Fivetran during a backfill. Lower it if requests are too large."
+    },
+    {
+      "id": "enabled",
+      "label": "Enabled",
+      "type": "boolean",
+      "ui": "toggle",
+      "default": true,
+      "description": "Turns off all sending without uninstalling the app"
+    }
+  ]
+}

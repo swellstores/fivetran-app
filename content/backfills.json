@@ -1,0 +1,328 @@
+{
+  "$schema": "https://json.swell.store/content.json",
+  "collection": "backfills",
+  "label": "Fivetran backfills",
+  "description": "Send existing records to Fivetran",
+  "fields": [
+    {
+      "id": "collection",
+      "label": "Collection",
+      "type": "select",
+      "required": true,
+      "options": [
+        {
+          "value": "test",
+          "label": "Connection test"
+        },
+        {
+          "value": "orders",
+          "label": "Orders"
+        },
+        {
+          "value": "accounts",
+          "label": "Customers"
+        },
+        {
+          "value": "products",
+          "label": "Products"
+        },
+        {
+          "value": "subscriptions",
+          "label": "Subscriptions"
+        },
+        {
+          "value": "payments",
+          "label": "Payments"
+        },
+        {
+          "value": "refunds",
+          "label": "Refunds"
+        },
+        {
+          "value": "invoices",
+          "label": "Invoices"
+        },
+        {
+          "value": "carts",
+          "label": "Carts"
+        },
+        {
+          "value": "coupons",
+          "label": "Coupons"
+        },
+        {
+          "value": "promotions",
+          "label": "Promotions"
+        },
+        {
+          "value": "categories",
+          "label": "Categories"
+        }
+      ],
+      "description": "Connection test sends one test row to check the webhook URL and signature."
+    },
+    {
+      "id": "status",
+      "label": "Status",
+      "type": "select",
+      "readonly": true,
+      "options": [
+        {
+          "value": "pending",
+          "label": "Pending"
+        },
+        {
+          "value": "running",
+          "label": "Running"
+        },
+        {
+          "value": "completed",
+          "label": "Completed"
+        },
+        {
+          "value": "failed",
+          "label": "Failed"
+        },
+        {
+          "value": "canceled",
+          "label": "Canceled"
+        }
+      ]
+    },
+    {
+      "id": "date_from",
+      "label": "Created on or after",
+      "type": "date",
+      "description": "Optional. Leave empty to send every record."
+    },
+    {
+      "id": "sent",
+      "label": "Sent",
+      "type": "number",
+      "readonly": true
+    },
+    {
+      "id": "total",
+      "label": "Total",
+      "type": "number",
+      "readonly": true
+    },
+    {
+      "id": "pages",
+      "label": "Pages",
+      "type": "number",
+      "readonly": true
+    },
+    {
+      "id": "last_id",
+      "label": "Last record ID",
+      "type": "short_text",
+      "readonly": true
+    },
+    {
+      "id": "last_error",
+      "label": "Error",
+      "type": "long_text",
+      "readonly": true
+    },
+    {
+      "id": "date_started",
+      "label": "Started",
+      "type": "date",
+      "readonly": true
+    },
+    {
+      "id": "date_completed",
+      "label": "Finished",
+      "type": "date",
+      "readonly": true
+    }
+  ],
+  "views": [
+    {
+      "id": "list",
+      "nav": {
+        "label": "Fivetran",
+        "icon": "integrations"
+      },
+      "sort": {
+        "date_created": "desc"
+      },
+      "fields": [
+        {
+          "id": "collection"
+        },
+        {
+          "id": "status"
+        },
+        {
+          "id": "sent"
+        },
+        {
+          "id": "total"
+        },
+        {
+          "id": "date_started"
+        },
+        {
+          "id": "date_completed"
+        }
+      ],
+      "tabs": [
+        {
+          "id": "active",
+          "label": "Active",
+          "query": {
+            "where": {
+              "status": {
+                "$in": [
+                  "pending",
+                  "running"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "failed",
+          "label": "Failed",
+          "query": {
+            "where": {
+              "status": "failed"
+            }
+          }
+        }
+      ],
+      "actions": [
+        "new",
+        {
+          "id": "backfill_all",
+          "label": "Backfill all synced collections",
+          "function": "backfill-all",
+          "loading_label": "Starting backfills...",
+          "modal": {
+            "title": "Backfill all synced collections",
+            "description": "Starts one backfill for each collection selected in the app settings. Collections that already have an active backfill are skipped.",
+            "submit_label": "Start",
+            "fields": [
+              {
+                "id": "date_from",
+                "label": "Created on or after",
+                "type": "date",
+                "description": "Optional. Leave empty to send every record."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "new",
+      "fields": [
+        {
+          "id": "collection"
+        },
+        {
+          "id": "date_from"
+        }
+      ]
+    },
+    {
+      "id": "edit",
+      "title": "{{ record.collection }} backfill",
+      "fields": [
+        {
+          "type": "field_row",
+          "fields": [
+            {
+              "id": "collection",
+              "readonly": true,
+              "admin_span": 2
+            },
+            {
+              "id": "status",
+              "admin_span": 2
+            }
+          ]
+        },
+        {
+          "type": "field_row",
+          "fields": [
+            {
+              "id": "sent",
+              "admin_span": 1
+            },
+            {
+              "id": "total",
+              "admin_span": 1
+            },
+            {
+              "id": "pages",
+              "admin_span": 1
+            },
+            {
+              "id": "date_from",
+              "readonly": true,
+              "admin_span": 1
+            }
+          ]
+        },
+        {
+          "type": "field_row",
+          "fields": [
+            {
+              "id": "date_started",
+              "admin_span": 2
+            },
+            {
+              "id": "date_completed",
+              "admin_span": 2
+            }
+          ]
+        },
+        {
+          "id": "last_id"
+        },
+        {
+          "id": "last_error",
+          "conditions": {
+            "last_error": {
+              "$exists": true
+            }
+          }
+        }
+      ],
+      "actions": [
+        {
+          "id": "cancel",
+          "label": "Cancel backfill",
+          "function": "backfill-control",
+          "conditions": {
+            "status": {
+              "$in": [
+                "pending",
+                "running"
+              ]
+            }
+          },
+          "modal": {
+            "description": "Stops sending after the current page. Records already sent stay in Fivetran."
+          }
+        },
+        {
+          "id": "resume",
+          "label": "Resume backfill",
+          "function": "backfill-control",
+          "conditions": {
+            "status": {
+              "$in": [
+                "failed",
+                "canceled"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

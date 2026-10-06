@@ -1,0 +1,4 @@
+- **App ID:** fivetran
+- **Project:** Swell integration app that streams store records to a Fivetran Webhooks connector. `functions/record-events.ts` sends created/updated/deleted records of the selected collections; backfill jobs (`apps/fivetran/backfills`) page through a collection by id cursor, one page per `backfill-run` invocation, re-triggered by their own progress update. Settings in `settings/fivetran.json`; action functions for test event, backfill all, cancel/resume.
+- **Rules:** credentials and options only in settings. Every function has vitest tests. Keep README.md current. Don't run `swell app version`/`release` or commit without asking.
+- **Tools:** Swell skills, Swell CLI, and senior agents for troubleshooting. Consult appropriate skill to ensure competent actions.

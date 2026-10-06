@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json.swell.store/model.json",
+  "collection": "backfills",
+  "label": "Fivetran backfills",
+  "description": "Historical export jobs that send existing records to Fivetran",
+  "name_pattern": "{collection} backfill",
+  "fields": {
+    "collection": {
+      "type": "string",
+      "required": true,
+      "enum": [
+        "orders",
+        "accounts",
+        "products",
+        "subscriptions",
+        "payments",
+        "refunds",
+        "invoices",
+        "carts",
+        "coupons",
+        "promotions",
+        "categories",
+        "test"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "default": "pending",
+      "enum": [
+        "pending",
+        "running",
+        "completed",
+        "failed",
+        "canceled"
+      ]
+    },
+    "date_from": {
+      "type": "date",
+      "description": "Only send records created on or after this date"
+    },
+    "last_id": {
+      "type": "string",
+      "description": "ID of the last record sent; the next page starts after it"
+    },
+    "pages": {
+      "type": "int",
+      "default": 0
+    },
+    "sent": {
+      "type": "int",
+      "default": 0,
+      "description": "Records sent to Fivetran"
+    },
+    "total": {
+      "type": "int",
+      "description": "Records to send, counted on the first page"
+    },
+    "last_error": {
+      "type": "string"
+    },
+    "date_started": {
+      "type": "date"
+    },
+    "date_completed": {
+      "type": "date"
+    }
+  },
+  "events": {
+    "types": [
+      {
+        "id": "created"
+      },
+      {
+        "id": "updated"
+      },
+      {
+        "id": "deleted"
+      }
+    ]
+  }
+}

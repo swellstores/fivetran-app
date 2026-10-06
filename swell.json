@@ -1,0 +1,34 @@
+{
+  "description": "Stream Swell store data to your warehouse through Fivetran",
+  "id": "fivetran",
+  "name": "Fivetran",
+  "type": "integration",
+  "version": "1.0.0",
+  "permissions": [],
+  "images": [
+    {
+      "id": "live-sync",
+      "title": "Store changes, streamed live",
+      "description": "Orders, customers, products and more are sent to your Fivetran Webhooks connector as soon as they change.",
+      "image_src": "assets/screenshots/1-live-sync.png"
+    },
+    {
+      "id": "backfills",
+      "title": "Backfill your history",
+      "description": "Send existing records per collection, or every synced collection in one click.",
+      "image_src": "assets/screenshots/2-backfills.png"
+    },
+    {
+      "id": "backfill-progress",
+      "title": "Progress you can follow",
+      "description": "Each backfill shows records sent, errors, and can be canceled or resumed.",
+      "image_src": "assets/screenshots/3-backfill-progress.png"
+    },
+    {
+      "id": "setup",
+      "title": "Connected in minutes",
+      "description": "Paste the Webhooks connector URL, optionally a signing secret, and send a test event.",
+      "image_src": "assets/screenshots/4-setup.png"
+    }
+  ]
+}
