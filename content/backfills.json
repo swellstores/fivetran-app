@@ -201,7 +201,7 @@
           "loading_label": "Starting backfills...",
           "modal": {
             "title": "Backfill all collections",
-            "description": "Starts one backfill for each of the 11 collections. Collections that already have an active backfill are skipped.",
+            "description": "Starts one backfill for each collection. Collections that already have an active backfill are skipped.",
             "submit_label": "Start",
             "fields": [
               {

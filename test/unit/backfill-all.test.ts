@@ -23,7 +23,7 @@ describe("backfill-all", () => {
     expect((config as any).action).toBe(true);
   });
 
-  it("starts a backfill for all 11 collections, not only those selected in settings", async () => {
+  it("starts a backfill for all collections, not only those selected in settings", async () => {
     const { req, get, post } = setup();
     const result = await handler(req);
 
