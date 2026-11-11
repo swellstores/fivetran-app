@@ -9,4 +9,4 @@ Connect your Webhooks connector with its URL, choose the collections to send and
 - **An event log in your warehouse.** Each change is one row with the full record, so you can build history or current-state tables.
 - **Retries when Fivetran is busy.** If Fivetran is down or rate-limits the app, Swell sends the change again later.
 
-Setup takes a few minutes. In Fivetran, add a Webhooks connector and copy its webhook URL. Paste it in the app settings, choose the collections to send and save. Then open Fivetran in the dashboard sidebar, create a backfill with collection Connection test to check the connection, and start backfills to send your existing records.
+Setup takes a few minutes. In Fivetran, add a Webhooks connector and copy its webhook URL. Paste it in the app settings, choose the collections to send and save. Then choose Test connection to send a test event, and start backfills from Fivetran in the dashboard sidebar to send your existing records.

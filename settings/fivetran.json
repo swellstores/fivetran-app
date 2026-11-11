@@ -1,7 +1,16 @@
 {
   "$schema": "https://json.swell.store/setting.json",
   "label": "Fivetran",
-  "description": "Stream store data to a Fivetran Webhooks connector. In Fivetran, add a Webhooks connector and paste its URL below. To check the connection, open Fivetran in the sidebar and create a backfill with collection \"Connection test\". Then start backfills to send existing records.",
+  "description": "Stream store data to a Fivetran Webhooks connector. In Fivetran, add a Webhooks connector and paste its URL below. After saving, choose Test connection to send a test event to the connector. Then start backfills to send existing records.",
+  "actions": [
+    {
+      "id": "test_connection",
+      "label": "Test connection",
+      "function": "test-connection",
+      "loading_label": "Testing…",
+      "hint": "Sends one test event to your Fivetran connector"
+    }
+  ],
   "fields": [
     {
       "id": "webhook_url",

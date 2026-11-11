@@ -9,7 +9,7 @@ Stream your Swell store data to your warehouse through [Fivetran](https://www.fi
 - **Backfills:** a **Fivetran** page in the dashboard sidebar lists backfill jobs. Start one per collection with **New fivetran backfill** (optionally only records created after a date), or all collections at once with **Backfill all collections**. Each job shows its status, records sent, total and the last error.
 - **Cancel and resume:** an active backfill can be canceled. A failed or canceled one can be resumed. It continues after the last record sent.
 - **Request signing:** with a signing secret, every request carries an HMAC SHA-256 signature that the connector can verify.
-- **Connection test:** create a backfill with collection **Connection test** to send one test row. The job shows `completed`, or `failed` with Fivetran's error.
+- **Connection test:** **Test connection** in the app settings sends one test row and shows Fivetran's answer. A backfill with collection **Connection test** does the same as a job, which shows `completed`, or `failed` with Fivetran's error.
 
 ## Settings
 
@@ -31,7 +31,7 @@ All credentials and options are app settings (`settings/fivetran.json`). Nothing
 1. In Fivetran, add a connector of type **Webhooks** and choose the destination schema and table name. Copy the **webhook URL** from the setup form.
 2. Optional: in the connector's signature validation, choose algorithm **SHA-256**, encoding hex or base64, a header key (e.g. `X-Fivetran-Signature-256`) and a secret.
 3. Install the app in Swell and open its settings. Paste the **Webhook URL**. If you set up signing, enter the same secret, header and encoding. Pick the collections to send events for and save.
-4. Open **Fivetran** in the dashboard sidebar, click **New fivetran backfill**, choose collection **Connection test** and save. Within a few seconds the job should show status **Completed**. If it shows **Failed**, the error explains why (wrong URL, signature mismatch, ...).
+4. Choose **Test connection** in the app settings. It sends one test row and says whether Fivetran accepted it, or why not (unknown connector URL, signature mismatch, ...).
 5. Start backfills to send existing records: **Backfill all collections**, or **New fivetran backfill** with one collection.
 6. After the connector's next sync, the rows are in your destination.
 
@@ -73,7 +73,7 @@ The table is an **event log**, not a mirror: every change adds a row. To get the
 | `functions/backfill-run.ts` | `backfill.created`, `backfill.updated` (status `pending` or `running`) | For a **Connection test** job, sends one test row. Otherwise sends one page of the collection (sorted by id, after `last_id`) and saves progress. Saving the page triggers the next run, so each page gets its own 10-second function run. |
 | `functions/backfill-all.ts` | Action: **Backfill all collections** (backfills list) | Creates a pending backfill for each collection that has no active one. |
 | `functions/backfill-control.ts` | Actions: **Cancel backfill**, **Resume backfill** (backfill page) | Sets the job to `canceled`, or back to `pending`. |
-| `functions/test-connection.ts` | Action (not shown in the dashboard yet, see Development) | Sends one `test` row and returns the result. Callable with `swell api post /functions/fivetran/test-connection`. |
+| `functions/test-connection.ts` | Action (**Test connection** in the settings) | Sends one `test` row and returns the result, naming the connector's host. |
 | `functions/lib/fivetran.ts` | Shared | Collection map, row builder, HMAC signing, Fivetran client, settings helpers. |
 
 Backfill jobs are stored in the app collection `apps/fivetran/backfills` (`models/backfills.json`): `collection` (a collection id, or `test` for a connection test), `status` (`pending`, `running`, `completed`, `failed`, `canceled`), `date_from`, `last_id`, `pages`, `sent`, `total`, `last_error`, `date_started`, `date_completed`. The dashboard views are in `content/backfills.json`.
@@ -114,7 +114,6 @@ swell logs --type function -s backfill-run
 - **Integration tests** (`test/integration/`) are read-only and use your `swell login` session against the test store. They check the app settings and backfills collection, and that every collection pages by an id cursor. Run `swell app push` first.
 - **Trying it without Fivetran:** set the webhook URL to an echo endpoint (e.g. `https://httpbin.org/post`) in the test environment, limit the collections to non-personal data such as categories, and start a backfill. `https://httpbin.org/status/400` tests the failure path. Clear the URL afterwards: it's required in the UI, so remove it through the API with `swell api put /settings/<app record id> --body '{"$unset":"fivetran.webhook_url"}'`.
 - **Actions** (`action: true` functions) run from the dashboard. With admin credentials they can also be called as `swell api post /functions/fivetran/<name> --body '{...}'` (pass `$action` yourself), and without credentials they return 404. The CLI's local validator (`swell schema function`) doesn't know the `action` trigger yet and reports "Config must specify one of: route, model, cron". `swell app push` accepts them. After a re-push, the function record also carries empty `model`/`route` objects, so `swell inspect functions` may list an action function as `route`. That's cosmetic.
-- **Settings actions:** this store's dashboard doesn't show settings `actions` (the Actions menu only has Disable/Uninstall), and `swell app push` fails with "Something went wrong" for a `type: "action"` field in a settings file. That's why the connection test is a backfill job.
 - **Event payloads:** on `deleted` events, the record id is only in `$event.data`. `req.data.id` is missing.
 - **Test scaffold:** `test/tsconfig.json` adds the `webworker.iterable` lib so the scaffolded `mock-request.ts` typechecks.
 
