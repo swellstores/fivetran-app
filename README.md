@@ -118,3 +118,7 @@ swell logs --type function -s backfill-run
 - **Test scaffold:** `test/tsconfig.json` adds the `webworker.iterable` lib so the scaffolded `mock-request.ts` typechecks.
 
 Listing assets: `assets/icon.png` (Fivetran's mark, 512×512), `assets/image.png` (the 1200×630 social card) and the four App Store images in `assets/images/` (3200×1800), referenced from `images` in `swell.json`.
+
+## License
+
+MIT. See [LICENSE](LICENSE). Contributions are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md).

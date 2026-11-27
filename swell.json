@@ -1,5 +1,6 @@
 {
 	"description": "Stream Swell store data to your warehouse through Fivetran",
+	"repository_url": "https://github.com/swellstores/fivetran-app",
 	"id": "fivetran",
 	"name": "Fivetran",
 	"type": "integration",
